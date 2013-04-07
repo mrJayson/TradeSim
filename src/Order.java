@@ -5,8 +5,8 @@ public class Order {
 	final public String timeStamp;
 	final public String recordType;
 	final public String bidAsk;
-	final public float price;
-	final public int volume;
+	public float price;
+	public int volume;
 	final public String qualifier;
 	
 	

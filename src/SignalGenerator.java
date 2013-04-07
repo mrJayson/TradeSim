@@ -1,7 +1,7 @@
 
 public class SignalGenerator {
 
-	public static Order signalGenerator(String line) {
+	public static Order generateSignal(String line) {
 
 		String[] entry = line.split(",");
 		Order o = new Order(getID(entry), getTimeStamp(entry),
