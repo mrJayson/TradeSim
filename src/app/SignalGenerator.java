@@ -1,8 +1,9 @@
+package app;
 
 public class SignalGenerator {
 
 	public static Order generateSignal(String line) {
-
+		//change an order from CSV format to Order format
 		String[] entry = line.split(",");
 		Order o = new Order(getID(entry), getTimeStamp(entry),
 				getRecordType(entry), getBidAsk(entry),
@@ -82,6 +83,4 @@ public class SignalGenerator {
 		//independent
 		return entry[8];
 	}
-
-
 }

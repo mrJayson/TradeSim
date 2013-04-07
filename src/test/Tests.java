@@ -3,10 +3,21 @@ package test;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class Tests {
+import app.TradeEngine;
 
+public class Tests {
+	
+	String sampleCSV;
+	TradeEngine TE;
+
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		
+	}
+	
 	@Before
 	public void setUp() throws Exception {
 		
@@ -73,6 +84,16 @@ public class Tests {
 	}
 	
 	@Test
+	public void testOrderBookGetBid() {
+		
+	}
+	
+	@Test
+	public void testOrderBookGetAsk() {
+		
+	}
+	
+	@Test
 	public void testOrderBookAdd() {
 		
 	}
@@ -103,34 +124,32 @@ public class Tests {
 	}
 	
 	@Test
-	public void testGeneratorGetTimeStamp(String[] entry) {
+	public void testGeneratorGetTimeStamp() {
 
 	}
 
 	@Test
-	public void testGeneratorGetRecordType(String[] entry) {
+	public void testGeneratorGetRecordType() {
 
 	}
 
 	@Test
-	public void testGeneratorGetPrice(String[] entry) {
+	public void testGeneratorGetPrice() {
 
 	}
 
 	@Test
-	public void testGeneratorGetVolume(String[] entry) {
+	public void testGeneratorGetVolume() {
 
 	}
 
 	@Test
-	public void testGeneratorGetBidAsk(String[] entry) {
+	public void testGeneratorGetBidAsk() {
 
 	}
 	
 	@Test
-	public void testGeneratorGetQualifier(String[] entry) {
+	public void testGeneratorGetQualifier() {
 
 	}
-	
-
 }
