@@ -6,12 +6,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import app.TradeEngine;
+import app.OrderBook;
 
 public class Tests {
 	
 	String sampleCSV;
-	TradeEngine TE;
+	OrderBook TE;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {

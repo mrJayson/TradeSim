@@ -1,17 +1,44 @@
 package app;
 
+import java.io.IOException;
+
+import app.strategies.Strategy;
+
 public class SignalGenerator {
 
-	public static Order generateSignal(String line) {
-		//change an order from CSV format to Order format
-		String[] entry = line.split(",");
-		Order o = new Order(getID(entry), getTimeStamp(entry),
-				getRecordType(entry), getBidAsk(entry),
-				getPrice(entry), getVolume(entry), getQualifier(entry));
+	private SircaReader SR = new SircaReader();
+	private Strategy s = null;
+
+	public Order generateSignal() throws IOException {
+		//first gets strategy's signal
+		//if strategy returns nothing, get CSV signal
+		Order o = generateStrategySignal();
+		if (o == null) {
+			String line = SR.readLine();
+			o = generateCSVSignal(line);
+		}
 		return o;
 	}
 
-	private static long getID(String[] entry) {
+	private Order generateStrategySignal() {
+		return s.outputSignal();
+
+	}
+
+	private Order generateCSVSignal(String line) {
+		//change an order from CSV format to Order format
+		String[] entry = line.split(",");
+		Order o = Factory.order(getID(entry), getTimeStamp(entry),
+				getRecordType(entry), getBidAsk(entry),
+				getPrice(entry), getVolume(entry), getQualifier(entry));
+		
+		
+		
+		//TODO filter out trade signals here, dont need their trades, make our own
+		return o;
+	}
+
+	private long getID(String[] entry) {
 		//ID depends on bid/Ask value
 		long ID;
 		if (getBidAsk(entry).equals("B")) {
@@ -27,18 +54,18 @@ public class SignalGenerator {
 		return ID;
 	}
 
-	private static String getTimeStamp(String[] entry) {
+	private String getTimeStamp(String[] entry) {
 		//timestamp independent
 		return entry[2];
 	}
 
-	private static String getRecordType(String[] entry) {
+	private String getRecordType(String[] entry) {
 		//6 values
 		//ENTER,DELETE,AMEND,TRADE,OFFTR,CANCEL_TRADE
 		return entry[3];
 	}
 
-	private static float getPrice(String[] entry) {
+	private float getPrice(String[] entry) {
 		//depends on recordType
 		//exists if recordType == ENTER,TRADE,AMEND,OFFTR,CANCEL_TRADE
 		//not exist only if recordType == DELETE
@@ -51,7 +78,7 @@ public class SignalGenerator {
 		return price;
 	}
 
-	private static int getVolume(String[] entry) {
+	private int getVolume(String[] entry) {
 		//depends on recordType
 		//exists if recordType == ENTER,TRADE,AMEND,OFFTR,CANCEL_TRADE
 		//not exist only if recordType == DELETE
@@ -64,7 +91,7 @@ public class SignalGenerator {
 		return volume;
 	}
 
-	private static String getBidAsk(String[] entry) {
+	private String getBidAsk(String[] entry) {
 		//depends on RecordType
 		//exists if recordType == ENTER,DELETE,AMEND
 		//not exists if recordType == TRADE,CANCEL_TRADE,OFFTR
@@ -78,9 +105,23 @@ public class SignalGenerator {
 		}
 		return bidAsk;
 	}
-	
-	private static String getQualifier(String[] entry) {
+
+	private String getQualifier(String[] entry) {
 		//independent
 		return entry[8];
+	}
+
+	public void chooseCSV(String filepath) throws IOException {
+		SR.chooseFile(filepath);
+		SR.readLine();
+	}
+
+	public void closeCSV() throws IOException {
+		SR.closeFile();
+
+	}
+
+	public void selectStrategy(Strategy s) {
+		this.s = s;
 	}
 }

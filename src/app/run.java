@@ -2,29 +2,34 @@ package app;
 
 public class run {
 	public static void main(String[] args) {
+		//controller function
 		//simulates the function when the run button is pressed 
-		SircaReader SR = new SircaReader();
+		Factory f = new Factory();
+		SignalGenerator SG = f.signalGenerator();
+		//signal generator contains functionality to read CSV
+		OrderBook book = f.orderBook();
+		TradeEngine TE = f.tradeEngine();
 		try {
-			SR.chooseFile("C:/Users/Jason/workspace/TradeSim/Sample.csv");
-			String line;
-			SR.readLine();//get rid of the first line, header line
-			//one engine per company
-			//currently merged orderbooks and engine together
-			//add more Engines to simulate multiple companies
-			TradeEngine TE = new TradeEngine();
+			
+			String filepath = System.getProperty("user.dir") + "/Sample.csv";
+			SG.chooseCSV(filepath);
+			SG.selectStrategy(f.BasicStrategy());
+			//TODO add method to choose strategy type
+			
 			//running through the historic data
-			for (int i = 0; i < 2000; i++) {
-				SR.readLine();
+			
+			Order o;
+			while ((o = SG.generateSignal()) != null) {
+				//generates an order from either the strategy or CSV
+				//process it in orderbook
+				//tradeEngine processes orderbook
+				//display
+				
+				book.processOrder(o);
+				TE.trade();
+				book.display();
 			}
-			while ((line = SR.readLine()) != null) {
-				//generates an order from a CSV line
-				//to be processed in the trade engine
-				//and currently displays text of orderbook
-				Order o = SignalGenerator.generateSignal(line);
-				TE.processOrder(o);
-				TE.display();
-			}
-			SR.closeFile();
+			SG.closeCSV();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
